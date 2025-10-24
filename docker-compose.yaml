@@ -1,0 +1,63 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: chatseek_postgres
+    environment:
+      POSTGRES_USER: chatseek
+      POSTGRES_PASSWORD: chatseek_admin
+      POSTGRES_DB: chatseek
+    ports:
+      - "5433:5432"
+    volumes:
+      - chatseek_postgres_data:/var/lib/postgresql/data
+    networks:
+      - chatseek_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chatseek"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: chatseek_ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - chatseek_ollama_data:/root/.ollama
+    networks:
+      - chatseek_network
+    healthcheck:
+      disable: true
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: chatseek_server
+    environment:
+      DATABASE_URL: postgresql://chatseek:chatseek_admin@postgres:5432/chatseek
+      OLLAMA_BASE_URL: http://ollama:11434
+      SECRET_KEY: hvbufhufhvuheajkfgvewuhehjafehjgjgfejgje
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    networks:
+      - chatseek_network
+
+volumes:
+  chatseek_postgres_data:
+  chatseek_ollama_data:
+
+networks:
+  chatseek_network:
+    driver: bridge
