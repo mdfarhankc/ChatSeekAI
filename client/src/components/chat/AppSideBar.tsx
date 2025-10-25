@@ -22,6 +22,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import ChatItem from "./ChatItem";
 
 interface AppSidebarProps {
   chats: Chat[];
@@ -65,23 +66,12 @@ export default function AppSideBar({
                 </div>
               ) : (
                 chats.map((chat) => (
-                  <SidebarMenuItem key={chat.id}>
-                    <div className="group/item relative flex items-center gap-2">
-                      <SidebarMenuButton
-                        onClick={() => onSelectChat(chat.id)}
-                        isActive={currentChatId === chat.id}
-                        tooltip={chat.title}
-                        className="p-5"
-                      >
-                        <MessageSquare className="h-4 w-4" />
-                        <div className="flex-1 overflow-hidden group-data-[collapsible=icon]:hidden">
-                          <div className="font-medium truncate">
-                            {chat.title}
-                          </div>
-                        </div>
-                      </SidebarMenuButton>
-                    </div>
-                  </SidebarMenuItem>
+                  <ChatItem
+                    key={chat.id}
+                    chat={chat}
+                    currentChatId={currentChatId}
+                    onSelectChat={() => onSelectChat(chat.id)}
+                  />
                 ))
               )}
             </SidebarMenu>

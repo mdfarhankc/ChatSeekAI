@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
-import "highlight.js/styles/github-dark.css";
+import "highlight.js/styles/stackoverflow-dark.css";
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 
@@ -12,47 +12,51 @@ interface MessageContentProps {
 export default function MessageContent({ content }: MessageContentProps) {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
-  const copyToClipboard = (text: string, id: string) => {
+  const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    setCopiedCode(id);
+    setCopiedCode(text);
     setTimeout(() => setCopiedCode(null), 2000);
   };
   return (
-    <div className="prose prose-sm max-w-none dark:prose-invert">
+    <div className="text-sm sm:text-base">
       <ReactMarkdown
         rehypePlugins={[rehypeHighlight, rehypeRaw]}
         components={{
           code({ className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || "");
             const codeString = String(children).replace(/\n$/, "");
-            const codeId = `code-${Math.random()}`;
             const language = match ? match[1] : "text";
 
-            return !match ? (
-              <div className="relative group my-4 rounded-lg overflow-hidden">
-                <div className="flex items-center justify-between bg-gray-800 px-4 py-2">
-                  <span className="text-xs text-gray-400 font-mono uppercase">
-                    {language}
-                  </span>
-                  <button
-                    onClick={() => copyToClipboard(codeString, codeId)}
-                    className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-gray-700"
-                    title="Copy code"
-                  >
-                    {copiedCode === codeId ? (
-                      <Check className="w-4 h-4" />
-                    ) : (
-                      <Copy className="w-4 h-4" />
-                    )}
-                  </button>
+            // Has code in it
+            if (match) {
+              return (
+                <div className="relative group my-4 rounded-lg overflow-hidden">
+                  <div className="flex items-center justify-between bg-gray-800 px-4 py-2">
+                    <span className="text-xs text-gray-400 font-mono uppercase">
+                      {language}
+                    </span>
+                    <button
+                      onClick={() => copyToClipboard(codeString)}
+                      className="text-gray-400 hover:text-white transition-colors p-1 rounded hover:bg-gray-700"
+                      title="Copy code"
+                    >
+                      {copiedCode === codeString ? (
+                        <Check className="w-4 h-4 text-green-400 transition-opacity duration-200 opacity-100" />
+                      ) : (
+                        <Copy className="w-4 h-4 transition-opacity duration-200 opacity-100" />
+                      )}
+                    </button>
+                  </div>
+                  <pre className="mt-0 mb-0 bg-gray-900 p-4 overflow-x-auto">
+                    <code className={className} {...props}>
+                      {children}
+                    </code>
+                  </pre>
                 </div>
-                <pre className="mt-0! mb-0! bg-gray-900! p-4!">
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                </pre>
-              </div>
-            ) : (
+              );
+            }
+            // Inline code (no language)
+            return (
               <code
                 className="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono text-pink-600 dark:text-pink-400"
                 {...props}

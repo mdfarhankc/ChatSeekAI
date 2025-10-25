@@ -1,14 +1,9 @@
 import AppSideBar from "@/components/chat/AppSideBar";
+import ChatHeader from "@/components/chat/ChatHeader";
 import ChatScreen from "@/components/chat/ChatScreen";
 import NoChatScreen from "@/components/chat/NoChatScreen";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { useChats } from "@/hooks/useChats";
-import { Menu } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
@@ -46,24 +41,9 @@ export default function ChatsPage() {
         onSelectChat={handleSelectChat}
         onDeleteChat={() => {}}
       />
-      <SidebarInset>
+      <SidebarInset className="md:peer-data-[variant=inset]:m-0">
         <div className="flex-1 flex flex-col">
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-            <SidebarTrigger className="-ml-1">
-              <Menu className="h-5 w-5" />
-            </SidebarTrigger>
-            {currentChat && (
-              <>
-                <Separator orientation="vertical" className="mr-2 h-4" />
-                <div className="flex flex-col">
-                  <h1 className="text-lg font-semibold">{currentChat.title}</h1>
-                  <p className="text-sm text-muted-foreground">
-                    Model: {currentChat.model}
-                  </p>
-                </div>
-              </>
-            )}
-          </header>
+          <ChatHeader currentChat={currentChat} />
           {currentChatId && currentChat ? (
             <ChatScreen currentChatId={currentChatId} />
           ) : (
