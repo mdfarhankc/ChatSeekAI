@@ -1,7 +1,8 @@
 import httpx
 import json
-from typing import AsyncGenerator, Optional
+from typing import AsyncGenerator, Optional, List
 from app.core.config import settings
+from app.schemas.ollama import ModelResponse
 
 
 class OllamaService:
@@ -81,7 +82,7 @@ class OllamaService:
         except:
             return False
 
-    async def list_models(self) -> list[dict]:
+    async def list_models(self) -> List[ModelResponse]:
         """List available models in Ollama."""
         try:
             async with httpx.AsyncClient(timeout=10.0) as client:

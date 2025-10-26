@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router";
-import { useLogin } from "@/hooks/useLogin";
+import { useLogin } from "@/hooks/useAuth";
 
 export default function LoginPage() {
   const form = useForm<LoginValues>({
@@ -63,14 +63,18 @@ export default function LoginPage() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full font-bold" disabled={isLoading}>
+            <Button
+              type="submit"
+              className="w-full font-bold"
+              disabled={isLoading}
+            >
               {isLoading ? "Signing in..." : "Sign in"}
             </Button>
             <div className="text-center text-sm">
               <span className="text-gray-600 dark:text-gray-400">
                 Don't have an account?
               </span>
-              <Button variant={"link"} asChild>
+              <Button disabled={isLoading} variant={"link"} asChild>
                 <Link to="/register">Sign up</Link>
               </Button>
             </div>

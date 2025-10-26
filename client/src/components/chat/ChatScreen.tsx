@@ -5,6 +5,7 @@ import { useChatMessages, useStreamMessage } from "@/hooks/useMessages";
 import { ArrowDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
+import MessagesLoadingScreen from "./MessagesLoadingScreen";
 
 interface ChatScreenProps {
   currentChatId: string;
@@ -13,7 +14,8 @@ interface ChatScreenProps {
 export default function ChatScreen({ currentChatId }: ChatScreenProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const { messages } = useChatMessages(currentChatId);
+  const { messages, isLoading: isMessagesLoading } =
+    useChatMessages(currentChatId);
   const { streamMessage, isStreaming, streamingMessage } = useStreamMessage();
   const [isAtBottom, setIsAtBottom] = useState(true);
 
@@ -48,6 +50,8 @@ export default function ChatScreen({ currentChatId }: ChatScreenProps) {
   const handleSendMessage = async (message: string) => {
     await streamMessage(currentChatId, message);
   };
+
+  if (isMessagesLoading) return <MessagesLoadingScreen />;
 
   return (
     <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full relative">

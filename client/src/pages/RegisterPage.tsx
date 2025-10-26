@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router";
-import { useRegister } from "@/hooks/useRegister";
+import { useRegister } from "@/hooks/useAuth";
 
 export default function RegisterPage() {
   const form = useForm<RegisterValues>({
@@ -109,7 +109,7 @@ export default function RegisterPage() {
               <span className="text-gray-600 dark:text-gray-400">
                 Already have an account?
               </span>
-              <Button variant={"link"} asChild>
+              <Button disabled={isLoading} variant={"link"} asChild>
                 <Link to="/login">Sign in</Link>
               </Button>
             </div>

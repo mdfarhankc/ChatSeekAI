@@ -13,19 +13,19 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "../ui/button";
 import type { Chat } from "@/types";
-import { useLogout } from "@/hooks/useLogout";
+import { useLogout, useCurrentUser } from "@/hooks/useAuth";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
-import ChatItem from "./ChatItem";
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import ChatsList from "./ChatsList";
 
 interface AppSidebarProps {
-  chats: Chat[];
+  chats: Array<Chat>;
+  isChatsLoading: boolean;
   currentChatId: string | null;
   onSelectChat: (chatId: string) => void;
   onNewChat: () => void;
@@ -34,6 +34,7 @@ interface AppSidebarProps {
 
 export default function AppSideBar({
   chats,
+  isChatsLoading,
   currentChatId,
   onSelectChat,
   onNewChat,
@@ -59,22 +60,12 @@ export default function AppSideBar({
         <SidebarGroup>
           <SidebarGroupLabel>Recent Conversations</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {chats.length === 0 ? (
-                <div className="px-2 py-8 text-center text-sm text-muted-foreground group-data-[collapsible=icon]:hidden">
-                  No chats yet. Start a new conversation!
-                </div>
-              ) : (
-                chats.map((chat) => (
-                  <ChatItem
-                    key={chat.id}
-                    chat={chat}
-                    currentChatId={currentChatId}
-                    onSelectChat={() => onSelectChat(chat.id)}
-                  />
-                ))
-              )}
-            </SidebarMenu>
+            <ChatsList
+              chats={chats}
+              isLoading={isChatsLoading}
+              currentChatId={currentChatId}
+              onSelectChat={onSelectChat}
+            />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

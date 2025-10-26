@@ -45,7 +45,7 @@ export default function ChatItem({
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity group-data-[collapsible=icon]:hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <MoreHorizontal className="h-4 w-4" />

@@ -10,6 +10,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import type { Chat } from "@/types";
 import { Menu, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { ThemeToggle } from "../theme/ThemeToggle";
+import OllamaModelsDropdown from "./OllamaModelsDropdown";
 
 interface ChatHeaderProps {
   currentChat: Chat | undefined;
@@ -34,17 +35,19 @@ export default function ChatHeader({ currentChat }: ChatHeaderProps) {
         <SidebarTrigger className="-ml-1">
           <Menu className="h-5 w-5" />
         </SidebarTrigger>
-        {currentChat && (
-          <>
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <div className="flex flex-col">
-              <h1 className="text-lg font-semibold">{currentChat.title}</h1>
-              <p className="text-sm text-muted-foreground">
-                Model: {currentChat.model}
-              </p>
-            </div>
-          </>
-        )}
+        <div className="flex items-center gap-3">
+          <OllamaModelsDropdown />
+          {currentChat && (
+            <>
+              <Separator orientation="vertical" className="h-6" />
+              <div className="flex flex-col leading-tight">
+                <h1 className="text-base font-semibold truncate max-w-[200px]">
+                  {currentChat.title}
+                </h1>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       {/* Right side: Dropdown */}

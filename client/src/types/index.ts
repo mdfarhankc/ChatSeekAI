@@ -59,3 +59,10 @@ export interface PaginatedResponse<T> {
 export interface ErrorResponse {
     detail: string;
 }
+
+
+export interface OllamaModel {
+    name: string;
+    model: string;
+    size: number;
+}

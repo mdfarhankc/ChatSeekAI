@@ -12,7 +12,7 @@ export default function ChatsPage() {
   const { id: chatIdFromUrl } = useParams<{ id: string }>();
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
 
-  const { chats } = useChats();
+  const { chats, isLoading } = useChats();
 
   useEffect(() => {
     if (chatIdFromUrl) {
@@ -36,6 +36,7 @@ export default function ChatsPage() {
     <SidebarProvider defaultOpen={true}>
       <AppSideBar
         chats={chats?.items || []}
+        isChatsLoading={isLoading}
         currentChatId={currentChatId}
         onNewChat={handleNewChat}
         onSelectChat={handleSelectChat}

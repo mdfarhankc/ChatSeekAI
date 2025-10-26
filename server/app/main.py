@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.api.v1 import auth, user, chat, message
+from app.api.v1 import auth, user, chat, message, ollama
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -22,6 +22,7 @@ app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
 app.include_router(user.router, prefix=settings.API_V1_PREFIX)
 app.include_router(chat.router, prefix=settings.API_V1_PREFIX)
 app.include_router(message.router, prefix=settings.API_V1_PREFIX)
+app.include_router(ollama.router, prefix=settings.API_V1_PREFIX)
 
 
 @app.get("/")
