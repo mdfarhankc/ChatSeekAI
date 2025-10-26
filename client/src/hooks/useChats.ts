@@ -31,3 +31,15 @@ export const useCreateChat = () => {
 
     return { createChat, isLoading, ...mutate };
 }
+
+export const useDeleteChat = () => {
+    const queryClient = useQueryClient();
+    const { mutate: deleteChat, isPending: isLoading, ...mutate } = useMutation({
+        mutationFn: (chatId: string) => chatService.deleteChat(chatId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['chats'] });
+        },
+    });
+
+    return { deleteChat, isLoading, ...mutate };
+}
